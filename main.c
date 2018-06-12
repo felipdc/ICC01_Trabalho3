@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "main.h"
+#include "interface.h"
 
 /**
   * @desc A matriz sera inicializada utilizando a estrutura DOK,
@@ -33,19 +34,24 @@ Matrix *init_matrix (uint64_t m, uint64_t n) {
   *
   * @param Matrix *mat - matriz a ser apagada
   *
+  * @return bool $status - true se apagar a matriz com sucesso, false contrario
+  *
 */
 
-void freeMatrix (Matrix *mat) {
-	// Apaga todos os elementos da matriz
+bool freeMatrix (Matrix *mat) {
+	if (mat == NULL) {
+		return false;
+	}
+	// ELSE - Apaga todos os elementos da matriz
 	Elem *tmp = mat->elem;
 	while (mat->elem != NULL) {
 		tmp = mat->elem;
 		mat->elem = mat->elem->next;
 		free(tmp);
 	}
-
 	// Apaga a matriz
 	free(mat);
+	return true;
 }
 
 
@@ -290,8 +296,8 @@ void display_cols_sum (Matrix *mat) {
 }
 
 
-int main (void) {
-
+int main (void) {	
+	option_handle ();
 	Matrix *mat = init_matrix (20, 20);
 	add_element (mat, 0, 1, 2.2);
 	add_element (mat, 8, 5, 2.3);
