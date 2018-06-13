@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 #include "main.h"
 #include "interface.h"
 
@@ -256,6 +257,11 @@ void display_rows_sum (Matrix *mat) {
 	float hold_sum = 0;
 	Elem *node = mat->elem;
 
+	if (not_null_sz == 0) {
+		printf ("Matriz nao possui elementos nao nulos! \n");
+		return;
+	}
+
 	qsort(not_null_row, not_null_sz, sizeof(uint64_t), cmpfunc);
 
 	for (row_idx = 0; row_idx < not_null_sz; ++row_idx) {
@@ -269,6 +275,7 @@ void display_rows_sum (Matrix *mat) {
 		hold_sum = 0;
 		node = mat->elem;
 	}
+	printf ("Linhas nao impressas sao nulas\n");
 }
 
 
@@ -279,6 +286,11 @@ void display_cols_sum (Matrix *mat) {
 	uint64_t not_null_sz = get_not_null_col_num (mat->elem), col_idx;
 	float hold_sum = 0;
 	Elem *node = mat->elem;
+
+	if (not_null_sz == 0) {
+		printf ("Matriz nao possui elementos nao nulos! \n");
+		return;
+	}
 
 	qsort(not_null_col, not_null_sz, sizeof(uint64_t), cmpfunc);
 
@@ -293,19 +305,17 @@ void display_cols_sum (Matrix *mat) {
 		hold_sum = 0;
 		node = mat->elem;
 	}
+	printf ("Colunas nao impressas sao nulas\n");
 }
 
 
-int main (void) {	
-	option_handle ();
-	Matrix *mat = init_matrix (20, 20);
-	add_element (mat, 0, 1, 2.2);
-	add_element (mat, 8, 5, 2.3);
-	add_element (mat, 1, 1, 22.1);
-	//print_non_null (mat);
-	display_rows_sum (mat);
-	display_cols_sum (mat);
-	//printf ("%lu\n", get_not_null_num (mat->elem));
+int main (int argc, char *argv[]) {
 
+	if (argc == 2 && strcmp (argv[1], "-exemplo") == 0) {	
+		option_handle (true);
+		return 0;
+	}	
+
+	option_handle (false);
 	return 0;
 }

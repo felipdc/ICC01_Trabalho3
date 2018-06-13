@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 #include "interface.h"
 #include "main.h"
 
@@ -20,7 +21,6 @@ void display_splash_screen () {
 			"\t#  4 - Consultar soma de cada linha da matriz 		   #\n"
 			"\t#  5 - Consultar soma de cada coluna da matriz		   #\n"
 			"\t#  6 - Adicionar elemento na matriz			   #\n"
-			"\t#  7 - Salvar e Sair 					   #\n"
 			"\t# 							   #\n"
 			"\t############################################################\n");
 }
@@ -60,14 +60,119 @@ Matrix * read_init () {
 	return NULL;
 }
 
-void option_handle () {
+
+void option_free (Matrix *mat) {
+	if (!freeMatrix (mat)) {
+		printf ("Matriz nao existe!\n");
+	}
+	else printf ("Matriz excluida com sucesso!\n");
+}
+
+
+void option_find_elem (Matrix *mat) {
+	if (mat == NULL) {
+		printf ("Matriz nao existe!\n");
+		return;
+	}
+	uint64_t x = read_x (mat->m);
+	uint64_t y = read_y (mat->n);
+	printf ("%0.2f\n", get_element (mat, x, y));
+}	
+
+
+uint64_t read_x (uint64_t m) {
+	uint64_t x;
+
+	printf ("Insira a coordenada x.\n");
+	scanf ("%lu", &x);
+	getchar ();
+
+	// Verifica se o input eh vallido
+	while (x > m) {
+		printf ("Valor inserido incorreto\n"
+				"Insira a coordenada x.\n");
+		scanf ("%lu", &x);
+		getchar ();
+	}
+	return x;
+}
+
+
+uint64_t read_y (uint64_t n) {
+	uint64_t y;
+
+	printf ("Insira a coordenada y.\n");
+	scanf ("%lu", &y);
+	getchar ();
+
+	// Verifica se o input eh vallido
+	while (y > n) {
+		printf ("Valor inserido incorreto\n"
+				"Insira a coordenada y.\n");
+		scanf ("%lu", &y);
+		getchar ();
+	}
+	return y;
+}
+
+
+void get_sum (Matrix *mat, bool row) {
+	if (mat == NULL) {
+		printf ("Matriz nao existe!\n");
+		return;	
+	}
+	if (row) display_rows_sum (mat);
+	else display_cols_sum (mat);
+}
+
+
+void option_set_element (Matrix *mat) {
+	if (mat == NULL) {
+		printf ("Matriz nao existe!\n");
+		return;	
+	}
+	float val;
+	uint64_t x = read_x (mat->m);
+	uint64_t y = read_y (mat->n);
+	printf ("Insira o valor a ser inserido\n");
+	scanf ("%f", &val);
+	add_element (mat, x, y, val);
+}
+
+Matrix * init_sample_matrix () {
+	// Reseta o time do sistema para gerar posicoes aleatorias
+	srand((unsigned int)time(NULL));
+	uint64_t rand_x, rand_y;
+	float rand_val;
+	// Inicia uma matriz 1 milhao x 1 milhao para exemplo
+	Matrix *mat = init_matrix (1000000, 1000000);
+	// Adiciona 10000 valores em posicoes aleatorias da matriz
+	// Valores em float com range ate 1000
+	for (int i = 0; i < 10000; ++i) {
+		rand_x = rand () % 1000000;
+		rand_y = rand () % 1000000;
+		rand_val = ((float)rand () / (float)(RAND_MAX)) * 1000;
+		add_element (mat, rand_x, rand_y, rand_val);
+	}
+	return mat;
+}
+
+
+
+void option_handle (bool sample) {
 	Matrix *mat;
 	char option_read = ' ';
+	int option;
+
+	if (sample) mat = init_sample_matrix ();
+
 	while (option_read != '0') {
+
 		display_splash_screen ();
 		scanf ("%c", &option_read);
 		getchar (); // Get return input from keyboard
-		int option = option_read - '0';
+		option = option_read - '0';
+
 		switch (option) {
 			case 0:
 				return;
@@ -75,27 +180,24 @@ void option_handle () {
 				mat = read_init ();
 				break;
 			case 2:
-				if (freeMatrix (mat)) printf ("Matriz excluida com sucesso!\n");
-				else printf ("Matriz nao existe!\n");
+				option_free (mat);
 				break;
 			case 3:
-				if (mat == NULL) {
-					printf ("Matriz nao existe\n");
-					break;
-				}
-				// Else
+				option_find_elem (mat);
 				break;
 			case 4:
+				get_sum (mat, true);
 				break;
 			case 5:
+				get_sum (mat, false);
 				break;
 			case 6:
-				break;
-			case 7:
+				option_set_element (mat);
 				break;
 			default:
 				printf ("Opcao invalida, tente novamente.\n");
 		}
+
 		printf ("Pressione ENTER para retornar ao Menu\n");
 		getchar ();
 	}

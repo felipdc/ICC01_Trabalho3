@@ -11,6 +11,9 @@
 
 
 void display_splash_screen ();
-void option_handle ();
+void option_handle (bool sample);
+uint64_t read_x (uint64_t m);
+uint64_t read_y (uint64_t n);
 
-#endif // _INTERFACE_H_
+
+#endif /* _INTERFACE_H_ */

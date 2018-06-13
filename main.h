@@ -18,12 +18,6 @@ struct matrix {
 Matrix *init_matrix (uint64_t m, uint64_t n);
 int cmpfunc (const void * a, const void * b);
 float get_element (Matrix *mat, uint64_t m, uint64_t n);
-
-// static uint64_t *get_not_null_col (Elem *elem);
-// static uint64_t get_not_null_col_num (Elem *elem);
-// static uint64_t get_not_null_row_num (Elem *elem);
-// static uint64_t *get_not_null_row (Elem *elem);
-
 void add_element (Matrix *mat, uint64_t m, uint64_t n, float val);
 bool freeMatrix (Matrix *mat);
 void display_rows_sum (Matrix *mat);
