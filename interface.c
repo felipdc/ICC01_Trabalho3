@@ -10,6 +10,7 @@
   * @desc Imprime tela inicial com as opcoes do programa
   *
 */
+
 void display_splash_screen () {
 	clrscr();
 	printf ("\n\t#################### Matrizes Esparsas #####################\n"
@@ -24,6 +25,14 @@ void display_splash_screen () {
 			"\t# 							   #\n"
 			"\t############################################################\n");
 }
+
+
+/**
+  * @desc Le numero de linhas e colunas para inicializar matriz
+  *
+  * @return Retorna struct matrix com memoria alocada 
+  *
+*/
 
 Matrix * read_init () {
 	uint64_t m, n;
@@ -61,6 +70,13 @@ Matrix * read_init () {
 }
 
 
+/**
+  * @desc Chama a funcao que libera memoria da matriz e seus elementos
+  *
+  * @param Matrix *$mat - Matriz a ser desalocada da memoria
+  *
+*/
+
 void option_free (Matrix *mat) {
 	if (!freeMatrix (mat)) {
 		printf ("Matriz nao existe!\n");
@@ -68,6 +84,13 @@ void option_free (Matrix *mat) {
 	else printf ("Matriz excluida com sucesso!\n");
 }
 
+
+/**
+ * @desc Chama a funcao que encontra elementos na matriz e imprime na tela
+ *
+ * @param Matrix *$mat - Matriz a ser consultada
+ *
+*/
 
 void option_find_elem (Matrix *mat) {
 	if (mat == NULL) {
@@ -79,6 +102,14 @@ void option_find_elem (Matrix *mat) {
 	printf ("%0.2f\n", get_element (mat, x, y));
 }	
 
+
+/**
+ * @desc Le do usuario um valor x para ser consultado na matriz
+ *
+ * @param long unsigned $m - Numero de linhas da matriz
+ *
+ * @return $x - Valor lido do usuario
+*/
 
 uint64_t read_x (uint64_t m) {
 	uint64_t x;
@@ -98,6 +129,14 @@ uint64_t read_x (uint64_t m) {
 }
 
 
+/**
+ * @desc Le do usuario um valor y para ser consultado na matriz
+ *
+ * @param long unsigned $n - Numero de colunas da matriz
+ *
+ * @return $y - Valor lido do usuario
+*/
+
 uint64_t read_y (uint64_t n) {
 	uint64_t y;
 
@@ -116,6 +155,14 @@ uint64_t read_y (uint64_t n) {
 }
 
 
+/**
+ * @desc Imprime na tela a soma das linhas ou das colunas da matriz
+ *
+ * @param Matrix *$mat - Matriz a ser consultada
+ *        bool $row - True imprime linha, false coluna
+ *
+*/
+
 void get_sum (Matrix *mat, bool row) {
 	if (mat == NULL) {
 		printf ("Matriz nao existe!\n");
@@ -125,6 +172,12 @@ void get_sum (Matrix *mat, bool row) {
 	else display_cols_sum (mat);
 }
 
+
+/**
+ * @desc Adiciona elemento na matriz
+ * 
+ * @param Matrix *$mat - Matriz a ser adicionado elemento
+*/
 
 void option_set_element (Matrix *mat) {
 	if (mat == NULL) {
@@ -138,6 +191,13 @@ void option_set_element (Matrix *mat) {
 	scanf ("%f", &val);
 	add_element (mat, x, y, val);
 }
+
+
+/**
+ * @desc Inicia matriz de exemplo
+ *
+ * @return Retorna matriz de exemplo
+*/
 
 Matrix * init_sample_matrix () {
 	// Reseta o time do sistema para gerar posicoes aleatorias
@@ -158,6 +218,11 @@ Matrix * init_sample_matrix () {
 }
 
 
+/**
+ * @desc Le do usuario as opcoes da tela inicial e chama devidas funcoes
+ *
+ * @param bool $sample - Caso true, inicia a matriz exemplo
+*/
 
 void option_handle (bool sample) {
 	Matrix *mat;
